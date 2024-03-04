@@ -3,16 +3,16 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 # Create your models here.
  
- class Post(models.Model):
-     author=models.ForeignKey('auth.User')
-     title=models.CharField(max_length=255)
-     text=models.TxtField()
-     create_date=models.DateTimeField(default=timezone.now())
-     published_date=models.DateTimeFiled(blank=True,null=True)
+class Post(models.Model):
+    author=models.ForeignKey('auth.User')
+    title=models.CharField(max_length=255)
+    text=models.TextField()
+    create_date=models.DateTimeField(default=timezone.now)
+    published_date=models.DateTimeField(blank=True,null=True)
      
-     def publish(self):
-         self.published_date=timezone.now()
-         self.save()
+    def publish(self):
+        self.published_date=timezone.now()
+        self.save()
          
     def approve_comments(self):
         return self.comments.filter(approved_comment=True)
@@ -26,7 +26,7 @@ from django.core.urlresolvers import reverse
     
     
     
-class Comment(model.Model):
+class Comment(models.Model):
     post=models.ForeignKey('blog.Post',related_name='comments')
     author=models.CharField(max_length=200)
     text=models.TextField()
@@ -39,7 +39,8 @@ class Comment(model.Model):
     
     def get_absolute_url(self):
         return reverse("post_list", kwargs={"pk": self.pk})
-    
+    # def get_absolute_url(self):
+    #     return reverse("post_list")
         
     def __str__(self):
         return self.text
